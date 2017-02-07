@@ -4,13 +4,17 @@ const axios = require('axios');
 const BeerListItem = (i) => {
     console.log('********!! ', i)
      console.log('********!! ', i.item)
+     console.log('********!! selecteditem', i.selectedItem)
+     console.log('********!! selecteditem', i.expandedView)
     const caps = {
       padding: '0px'
     }
+    
     const item = i.item
-
     const onItemClick = item => {
       console.log('this is where you clicked : ', item)
+      // console.log('** this is boo : ', boo)
+      i.selectedItem(item)
     }
     
     const checker = (item) => {
@@ -22,6 +26,7 @@ const BeerListItem = (i) => {
       return item.subtitle.charAt(11) === '' ? item.subtitle : item.subtitle.slice(0, 11).concat('...')
     }
     console.log(item.id, '&&&&&')
+    if (i.expandedView() === false) {
     return (
       <li id={item._id} onClick={()=> onItemClick(item)} className="col-xs-6 col-sm-4 col-md-3 col-lg-2 thumbnail">
     
@@ -37,6 +42,12 @@ const BeerListItem = (i) => {
           
       </li>
     )
+    } else {
+      return (
+        <li> nope </li>
+      )
+    }
+    
 }
 
 module.exports =  BeerListItem;

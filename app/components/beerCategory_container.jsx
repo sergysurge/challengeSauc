@@ -10,9 +10,13 @@ module.exports = class App extends React.Component {
     super(props);
 
     this.state = {
-      value: 20
+      value: 20,
+      count: 0,
+      activeViewToggle: false
     }
     this._handleClick = this._handleClick.bind(this);
+    this._handleClickBeerList = this._handleClickBeerList.bind(this);
+    this._expandedViewActivated = this._expandedViewActivated.bind(this);
 
     console.log('this.props in App: ', this.props)
     // console.log('this.props.data', this.props === undefined)
@@ -22,7 +26,7 @@ module.exports = class App extends React.Component {
   _handleClick() {
     console.log('clicked for props : ' , this.props)
     console.log('and for state : ' , this.state)
-    // this.setState({data: true})
+    this.state.activeViewToggle ? this.setState({activeViewToggle : false}) : this.setState({activeViewToggle: true})
   }
   
   _onBeerRangeChange(val) {
@@ -34,9 +38,30 @@ module.exports = class App extends React.Component {
   _renderBeerItems_RangeChange(){
     return this.props.data.slice(0, this.state.value)
   }
+
+  _handleClickBeerList(click){
+    console.log('the this of _selectedBeer() : ', click, typeof this.state.activeViewToggle)
+    // this.setState({count: this.state.count++})
+    
+    //  this._expandedViewActivated()
+  }
+
+  _expandedViewActivated() {
+    console.log('toggling view? : ', this.state.activeViewToggle)
+    // if (this.state.activeViewToggle) {
+    //     this.setState({activeViewToggle : false})
+    // } else {
+
+    //   this.setState({activeViewToggle : true} )
+      
+    // }
+    return this.state.activeViewToggle
+  }
+  
   render() {
 
     // const value = lodash.debounce((val) => {this._onBeerRangeChange(val)}, 300);
+    
     const value = (val) => this._onBeerRangeChange(val)
     const cssNavLinks = { display: 'inline', padding: '5px', margin: 'auto', fontSize: '1.5em'}
 
@@ -60,7 +85,7 @@ module.exports = class App extends React.Component {
 
             <div className={'beers_component col-xs-12 col-md-12'} style={{padding: "0", margin: 'auto', textAlign: 'center'}}>
 
-                <BeerList data={this._renderBeerItems_RangeChange()} key={'bl1'} />
+                <BeerList data={this._renderBeerItems_RangeChange()} selectedBeer={click => this._handleClickBeerList(click)} expandedView={() => this._expandedViewActivated()} key={'bl1'} />
                 
             </div>
 
