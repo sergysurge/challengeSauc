@@ -23,7 +23,7 @@ const BeerListItem = (i) => {
     }
     console.log(item.id, '&&&&&')
     return (
-      <li id={item._id} onClick={()=> onItemClick(item)} className="col-xs-6 col-md-4 thumbnail">
+      <li id={item._id} onClick={()=> onItemClick(item)} className="col-xs-6 col-sm-4 col-md-3 col-lg-2 thumbnail">
     
             <img src={item.image} width={100 + '%'} style={{ borderRadius:"4px" }}/>
            

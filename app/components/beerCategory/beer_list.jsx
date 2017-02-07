@@ -11,13 +11,13 @@ const BeerList = (props) => {
       console.log('beerlist mapping', item._id)
       
       return (
-        <BeerListItem item={item} key={item._id} />
+        <BeerListItem item={item} key={item._id}  />
       );
     }
   )
 
   return(
-    <ul>
+    <ul className='beerlistitem' >
       {beerListItems}
     </ul>
   );

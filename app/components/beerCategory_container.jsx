@@ -41,7 +41,7 @@ module.exports = class App extends React.Component {
     const cssNavLinks = { display: 'inline', padding: '5px', margin: 'auto', fontSize: '1.5em'}
 
     return (
-          <section className={ 'container' } style={ {padding: "0"} }>
+          <section style={ {padding: "0"} }>
 
             <nav className="navbar navbar-default navbar-fixed-top">
               <div className="container">
@@ -50,16 +50,18 @@ module.exports = class App extends React.Component {
                   <li style={cssNavLinks}>Sergey Sarkisyan</li>
                 </ul>
                 <span className="col-xs-12">
-                  <span className="col-xs-10" style={{paddingTop: '3px'}}>
+                  <span className="col-xs-9" style={{paddingTop: '3px'}}>
                   <BeerRange onBeerRangeChange={value} /> 
                   </span>
-                  <p className="col-xs-2">{this.state.value === '1' ? `${this.state.value} item` : `${this.state.value} items`}  </p>
+                  <p className="col-xs-3">{this.state.value === '1' ? `${this.state.value} item` : `${this.state.value} items`}  </p>
                 </span>
               </div>
             </nav>
 
-            <div className={'beers_component col-xs-12 col-md-12 borders'} style={{padding: "0"}}>
+            <div className={'beers_component col-xs-12 col-md-12'} style={{padding: "0", margin: 'auto', textAlign: 'center'}}>
+
                 <BeerList data={this._renderBeerItems_RangeChange()} key={'bl1'} />
+                
             </div>
 
             <button onClick={this._handleClick}>click me </button>
