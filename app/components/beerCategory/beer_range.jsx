@@ -1,4 +1,5 @@
 const React = require('react');
+const lodash = require('lodash');
 
 module.exports = class Range extends React.Component {
   constructor(props) {
@@ -7,8 +8,12 @@ module.exports = class Range extends React.Component {
     this.state = {
       value: 20
     };
+  };
 
-  }
+  _onRangeChange = value => {
+    this.setState({ value });
+    this.props.onBeerRangeChange(value);
+  };
 
   render() {
     return (
@@ -20,13 +25,5 @@ module.exports = class Range extends React.Component {
         max="100" 
         step="1" />
     );
-  }
-
-  _onRangeChange = value => {
-    // console.log('this is the weird es6 shit', { value }, {value : value})
-    this.setState({ value })
-    console.log('DIS DA STATE', this.state)
-    console.log('DIS DA PROPS', this.props)
-    this.props.onBeerRangeChange(value);
-  }
-} 
+  };
+};

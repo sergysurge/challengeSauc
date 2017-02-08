@@ -1,5 +1,4 @@
 const React = require('react');
-const axios = require('axios');
 const lodash = require('lodash');
 const BeerList = require('./beerCategory/beer_list.jsx');
 const BeerRange = require('./beerCategory/beer_range.jsx');
@@ -12,63 +11,53 @@ module.exports = class App extends React.Component {
     this.state = {
       value: 20,
       count: 0,
-      activeViewToggle: false
-    }
-    this._handleClick = this._handleClick.bind(this);
+      selected: {}
+    };
+    
     this._handleClickBeerList = this._handleClickBeerList.bind(this);
     this._expandedViewActivated = this._expandedViewActivated.bind(this);
+    this._onBeerRangeChange = this._onBeerRangeChange.bind(this);
+  };
 
-    console.log('this.props in App: ', this.props)
-    // console.log('this.props.data', this.props === undefined)
-  //  this.state = {data: true};
-  }
-  
-  _handleClick() {
-    console.log('clicked for props : ' , this.props)
-    console.log('and for state : ' , this.state)
-    this.state.activeViewToggle ? this.setState({activeViewToggle : false}) : this.setState({activeViewToggle: true})
-  }
-  
+  //on change of scroll bar, send amount of beer_list_items to render
   _onBeerRangeChange(val) {
-    this.setState({ value: val })
-    console.log('you should have change state :', val)
+    this.setState({value: val})
     this._renderBeerItems_RangeChange()
-  }
+  };
 
+  //send state.value amount of beer_list_items to render
   _renderBeerItems_RangeChange(){
     return this.props.data.slice(0, this.state.value)
-  }
+  };
 
+  //on beer_list_item click, stores the information in state.selected
   _handleClickBeerList(click){
-    console.log('the this of _selectedBeer() : ', click, typeof this.state.activeViewToggle)
-    // this.setState({count: this.state.count++})
+    let result = {}
+    const id = click._id;
+
+    this.state.selected[id] === undefined ? result[id] = click : result[id] = undefined;
     
-    //  this._expandedViewActivated()
-  }
+    let final = Object.assign(this.state.selected, result)
 
+    this.setState( {selected: final} )
+    this._expandedViewActivated()
+  };
+
+  //sends back beer_list_items that have been activated AKA clicked on
   _expandedViewActivated() {
-    console.log('toggling view? : ', this.state.activeViewToggle)
-    // if (this.state.activeViewToggle) {
-    //     this.setState({activeViewToggle : false})
-    // } else {
-
-    //   this.setState({activeViewToggle : true} )
-      
-    // }
-    return this.state.activeViewToggle
-  }
+    return {
+      selected: lodash.omitBy(this.state.selected, (value, key) => value === undefined)
+    };
+  };
   
   render() {
-
-    // const value = lodash.debounce((val) => {this._onBeerRangeChange(val)}, 300);
-    
-    const value = (val) => this._onBeerRangeChange(val)
-    const cssNavLinks = { display: 'inline', padding: '5px', margin: 'auto', fontSize: '1.5em'}
+    const cssNavLinks = { display: 'inline', padding: '5px', margin: 'auto', fontSize: '1.5em'};
 
     return (
           <section style={ {padding: "0"} }>
 
-            <nav className="navbar navbar-default navbar-fixed-top">
+            <nav className="navbar navbar-default navbar-fixed-top" 
+            style={{background: '#696969', paddingTop: '10px', borderBottomRightRadius: 4, borderBottomLeftRadius: 4, color: 'white', boxShadow: '3px 3px 1px #888888'}}>
               <div className="container">
                 <ul className="col-xs-12">
                   <li style={cssNavLinks}>Saucey</li>
@@ -76,63 +65,22 @@ module.exports = class App extends React.Component {
                 </ul>
                 <span className="col-xs-12">
                   <span className="col-xs-9" style={{paddingTop: '3px'}}>
-                  <BeerRange onBeerRangeChange={value} /> 
+                    <BeerRange onBeerRangeChange={(val) => this._onBeerRangeChange(val)} /> 
                   </span>
                   <p className="col-xs-3">{this.state.value === '1' ? `${this.state.value} item` : `${this.state.value} items`}  </p>
                 </span>
               </div>
             </nav>
 
-            <div className={'beers_component col-xs-12 col-md-12'} style={{padding: "0", margin: 'auto', textAlign: 'center'}}>
-
-                <BeerList data={this._renderBeerItems_RangeChange()} selectedBeer={click => this._handleClickBeerList(click)} expandedView={() => this._expandedViewActivated()} key={'bl1'} />
-                
+            <div className={'col-xs-12 col-md-12'} 
+            style={{padding: "0", margin: 'auto', textAlign: 'center'}}>
+                <BeerList 
+                data={this._renderBeerItems_RangeChange()} 
+                selectedBeer={click => this._handleClickBeerList(click)} 
+                expandedView={() => this._expandedViewActivated()} 
+                key={'bl1'} />
             </div>
-
-            <button onClick={this._handleClick}>click me </button>
           </section>
     );
-  }
-
-
-
-
-  componentWillMount() {
-    console.log('Component WILL MOUNT!')
-    console.log('componentWillMount', this.props.data )
-  }
-  
-   componentDidMount() {
-      console.log('Component DID MOUNT!')
-      console.log('componentDidMount', this.props.data )
-      // if (!this.state.data) {
-      //   console.log(!this.state.data)
-      //   this.setState({data:true})
-      // }
-   }
-
-   componentWillReceiveProps(newProps) {    
-      console.log('Component WILL RECIEVE PROPS!')
-      console.log('componentDidMount', this.props.data)
-      console.log(newProps, 'component did mount')
-      
-   }
-
-   shouldComponentUpdate(newProps, newState) {
-      return true;
-   }
-
-   componentWillUpdate(nextProps, nextState) {
-      console.log('Component WILL UPDATE!');
-   }
-
-   componentDidUpdate(prevProps, prevState) {
-      console.log('Component DID UPDATE!')
-      
-   }
-
-   componentWillUnmount() {
-      console.log('Component WILL UNMOUNT!')
-   }
-   
-}
+  };
+};

@@ -1,53 +1,100 @@
 const React = require('react');
-const axios = require('axios');
 
-const BeerListItem = (i) => {
-    console.log('********!! ', i)
-     console.log('********!! ', i.item)
-     console.log('********!! selecteditem', i.selectedItem)
-     console.log('********!! selecteditem', i.expandedView)
+const BeerListItem = (data) => {
+
+    //stateless STATE object connected to beerCategory smart compoonent
+    const state = data.expandedView();
+
+    //stateless PROP object connected to beerCategory smart compoonent
+    const item = data.item;
+
+    //on item click, send data to beerCategory smart component
+    const onItemClick = item => {
+      data.selectedItem(item)
+    };
+    
+    //modifies the subtitle name to 14 characters
+    const stringLengthModifier = string => {
+      return string.charAt(14) === '' ? string : string.slice(0, 14).concat('...')
+    };
+    
+    //commonly used style
     const caps = {
       padding: '0px'
-    }
-    
-    const item = i.item
-    const onItemClick = item => {
-      console.log('this is where you clicked : ', item)
-      // console.log('** this is boo : ', boo)
-      i.selectedItem(item)
-    }
-    
-    const checker = (item) => {
-      console.log(item);
-      if (item.subtitle === undefined) {
-        return console.log('ITEM NOT HERE YET NIGGA')
-      }
-      console.log('item. subtitle is this : ', item.subtitle)
-      return item.subtitle.charAt(11) === '' ? item.subtitle : item.subtitle.slice(0, 11).concat('...')
-    }
-    console.log(item.id, '&&&&&')
-    if (i.expandedView() === false) {
-    return (
-      <li id={item._id} onClick={()=> onItemClick(item)} className="col-xs-6 col-sm-4 col-md-3 col-lg-2 thumbnail">
-    
-            <img src={item.image} width={100 + '%'} style={{ borderRadius:"4px" }}/>
-           
-          <div  className="caption col-xs-12" style={caps}> 
-            <p className="col-xs-7" style={{ padding: 0, paddingTop: 2, margin: 0, fontWeight: 'bold'}}> {item.title}</p>
-            <p className="col-xs-5" style={{ padding: 0, paddingTop: 2, margin: 0, fontWeight: 'bold'}}> ${item.price}</p>
-            <p className="col-xs-7" style={{ padding: 0, paddingTop: 2, margin: 0}}> { checker(item) }</p>
-            <p className="col-xs-5" style={{ padding: 0, paddingTop: 2, margin: 0}}> {item.volume}</p>
-          </div> 
-         
-          
-      </li>
-    )
-    } else {
+    };
+
+    //if ITEM has not been selected render the following
+    if (state.selected[item._id] === undefined) {
       return (
-        <li> nope </li>
-      )
-    }
-    
-}
+        <li id={item._id} 
+        onClick={()=> onItemClick(item)} 
+        className="col-xs-6 col-sm-4 col-md-3 col-lg-3 borders liHeight" 
+        style={{padding: '3px'}}>
+
+            <div className="col-xs-12" style={caps}>
+
+              <img className="col-xs-12 thumbnail" 
+              src={item.image} 
+              style={{ borderRadius:"4px", width: '100%'}}/>
+            <div  className="caption col-xs-12" style={caps}> 
+              <p className="col-xs-7" 
+              style={{ padding: 0, paddingTop: 2, margin: 0, fontWeight: 'bold'}}> {stringLengthModifier(item.title)}</p>
+              <p className="col-xs-5" 
+              style={{ padding: 0, paddingTop: 2, margin: 0, fontWeight: 'bold'}}> 
+              ${item.price}</p>
+              <p className="col-xs-7" 
+              style={{ padding: 0, paddingTop: 2, margin: 0}}> 
+              {stringLengthModifier(item.subtitle)}</p>
+              <p className="col-xs-5" 
+              style={{ padding: 0, paddingTop: 2, margin: 0}}> 
+              {item.volume}</p>
+            </div> 
+
+            </div>
+        </li>
+      )} else {
+        //IF ITEM HAS BEEN CLICKED ON!
+        //commonly used styles 
+    return (
+      <li id={item._id} 
+      onClick={()=> onItemClick(item)} 
+      className="col-xs-12 col-sm-8 col-md-6 col-lg-6 borders liHeight" 
+      style={{background: 'dimgrey', color: 'white'}}>
+
+          <div className="col-xs-6" style={caps}>
+            <img className="col-xs-12 thumbnail" 
+            src={item.image}
+            style={{ borderRadius:"4px", width: '100%'}}/>
+
+          <div className="caption col-xs-12" style={caps}> 
+            <p className="col-xs-7" 
+            style={{ padding: 0, paddingTop: 8, paddingBottom: 5, margin: 0, fontWeight: 'bold'}}> 
+            {item.title}</p>
+            <p className="col-xs-5" 
+            style={{ padding: 0, paddingTop: 8, paddingBottom: 5,margin: 0, fontWeight: 'bold'}}> 
+            ${item.price}</p>
+          </div>
+
+          </div> 
+        
+        <div className="col-xs-6" style={caps}>
+          <h4 className="col-xs-12" style={caps}>
+            {item.company.toUpperCase()}</h4>
+          <p className="col-xs-12" style={caps}> 
+            <strong>{item.subtitle}</strong></p>
+          <p className="col-xs-12" style={caps}> 
+            {item.description + ' ' + item.subtitle} </p>
+          <p className="col-xs-12" style={caps}> 
+            <strong>TYPE:</strong> {item.type.toUpperCase()}</p>
+          <p className="col-xs-12" style={caps}> 
+            <strong>VOLUME:</strong> {item.volume}</p>
+          <p className="col-xs-12" style={caps}> 
+            <strong>STYLE:</strong> {item.style}</p>
+          <p className="col-xs-12" style={caps}> 
+            <strong>SKU:</strong> {item.sku_id}</p>
+        </div>
+      </li>
+    )};
+};
 
 module.exports =  BeerListItem;

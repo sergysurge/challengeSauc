@@ -1,7 +1,7 @@
 {
-  "name": "server_react",
+  "name": "sergey_saucey",
   "version": "1.0.0",
-  "description": "",
+  "description": "Sergey Sarkisyan's code challenge for Saucey",
   "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
     "webpack": "webpack -w",
     "nodemon": "nodemon server/server.js --ext js, jsx"
   },
-  "author": "",
+  "author": "Sergey Sarkisyan",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.22.1",
